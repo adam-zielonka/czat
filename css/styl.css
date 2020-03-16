@@ -1,0 +1,70 @@
+@import url("/css/tabeleDanych.css");
+@import url("/css/tabelePogody.css");
+@import url("/css/czat.css");
+
+body {
+	margin: 0px;
+    font-family: Arial;
+}
+
+#strona {
+	width: 100%;
+	margin: auto;
+    background-color: Orange;
+}
+
+header {
+	background-color: Green;
+	padding: 10px;
+	color: White;
+	text-align: center;
+	font-size: 40px;
+    font-weight: 700;
+}
+
+nav {
+    position: relative;
+	background-color: Orange;
+    float: left;
+}
+
+article {
+	background-color: Orange;
+    float: left;
+}
+
+footer {
+	background-color: Gray;
+	clear: both;
+}
+
+.tekst {
+	padding: 10px;
+}
+
+table.form {
+    text-align: center;
+}
+
+#formularz {
+    float: left;
+}
+
+#dane {
+    float: left;
+}
+
+a:hover {
+	background-color: White;
+}
+
+a:link, a:visited {
+    color: Black;
+    text-decoration: none;
+    cursor: auto;
+}
+
+a:link:active, a:visited:active {
+    color: Red;
+	background-color: White;
+} 
