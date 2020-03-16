@@ -14,7 +14,6 @@
         <li><a class="menu" href="/index.php?strona=kontakt">Kontakt</a></li>
         <li><a class="menu" href="/index.php?strona=mysql">MySQL + AJAX</a></li>
         <li><a class="menu" href="/index.php?strona=uploadfile">UpLoad</a></li>
-        <li><a class="menu" href="/index.php?strona=kontrolki">Kontrolki</a></li>
     </ul>
 </div>
 <div class="tekst">
