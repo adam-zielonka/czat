@@ -9,7 +9,6 @@
         <li><a class="menu" href="/index.php">Start</a></li>
         <li><a class="menu" href="/index.php?strona=formularz">Formularz</a></li>
         <li><a class="menu" href="/index.php?strona=formularz2">Formularz 2</a></li>
-        <li><a class="menu" href="/index.php?strona=pogoda">Pogoda</a></li>
         <li><a class="menu" href="/index.php?strona=kasowanie">Kasowanie</a></li>
         <li><a class="menu" href="/index.php?strona=kontakt">Kontakt</a></li>
         <li><a class="menu" href="/index.php?strona=mysql">MySQL + AJAX</a></li>
