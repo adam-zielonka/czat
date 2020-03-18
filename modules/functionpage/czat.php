@@ -35,6 +35,10 @@
         $user = $_SESSION["login"];
         global $conn;
         $sql = "INSERT INTO online (user) VALUES ('$user');";
+        if(!(mysqli_query($conn,$sql)))
+        {
+            echo "Error: ".$sql."<br>".mysqli_error($conn);
+        }
     }
     
     function _updateUserOnline()

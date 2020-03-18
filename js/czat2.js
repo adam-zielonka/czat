@@ -1,6 +1,7 @@
 var czat;
 var nr = 0;
 var stopAjax = 0;
+var delay = 2000;
 
 function FirstLoadAjax() {
     $.ajax({
@@ -15,14 +16,15 @@ function FirstLoadAjax() {
             $("#czat").html(' ');
             Read();
             if (!(stopAjax))
-                LoadAjax();
+                setTimeout(function() { LoadAjax(); }, delay);
+                
         },
         error: function () {
             $("#online").html("Błąd połączenia :-( Sprawdź czy masz internet.");
             $("#sendmsg").prop("disabled", true);
             $("#msg").prop("disabled", true);
             if (!(stopAjax))
-                ErrorLoadAjax();
+                setTimeout(function() { ErrorLoadAjax(); }, delay);
         }
     })
 }
@@ -39,14 +41,14 @@ function LoadAjax() {
             czat = json;
             Read();
             if (!(stopAjax))
-                LoadAjax();
+                setTimeout(function() { LoadAjax(); }, delay);
         },
         error: function () {
             $("#online").html("Błąd połączenia :-( Sprawdź czy masz internet.");
             $("#sendmsg").prop("disabled", true);
             $("#msg").prop("disabled", true);
             if (!(stopAjax))
-                ErrorLoadAjax();
+                setTimeout(function() { ErrorLoadAjax(); }, delay);
         }
     })
 }
@@ -65,11 +67,11 @@ function ErrorLoadAjax() {
             $("#sendmsg").removeAttr('disabled');
             $("#msg").removeAttr('disabled');
             if (!(stopAjax))
-                LoadAjax();
+                setTimeout(function() { LoadAjax(); }, delay);
         },
         error: function () {
             if (!(stopAjax))
-                ErrorLoadAjax();
+                setTimeout(function() { ErrorLoadAjax(); }, delay);
         }
     })
 }
