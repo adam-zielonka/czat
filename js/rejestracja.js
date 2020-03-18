@@ -53,12 +53,6 @@ function SprawdzHasla() {
     return error;
 }
 
-function SprawdzPhoto() {
-    var fd = new FormData(document.querySelector("form[id='rejestracja']"));
-    $("#testphoto").html("Sprawdzanie...");
-    CheckPhoto(fd);
-}
-
 $("#login").keyup(function () {
     SprawdzLogin();
 }).change(function () {
@@ -103,10 +97,6 @@ $("#passwordrepeat").keyup(function () {
     SprawdzHasla();
 });
 
-$("#photo").change(function () {
-    SprawdzPhoto();
-});
-
 ajaxElement = 0;
 ajaxSpr = 0;
 $("#send").click(function () {
@@ -115,7 +105,6 @@ $("#send").click(function () {
     SprawdzHasla();
     SprawdzHaslo();
     SprawdzLogin();
-    SprawdzPhoto();
     ajaxSpr = 1;
     $(document).ajaxStop(function () {
         if (ajaxElement == 0 && ajaxSpr == 1) {

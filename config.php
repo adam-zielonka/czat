@@ -8,11 +8,8 @@ session_start();
 require './modules/function/others.php';
 require './modules/function/site.php';
 require './modules/function/mysql.php';
-require './modules/function/uploadfiles.php';
 
 $site = true;
-$language = 'pl';
-$languageText = parse_ini_file("./modules/lang/$language.ini", true);
 
 //Local = true
 //Azure = false

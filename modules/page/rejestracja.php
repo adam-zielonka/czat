@@ -24,11 +24,6 @@
                     <td id="testpasswordrepeat">Wymagane, takie same jak wyżej :-)</td>
                 </tr>
                 <tr>
-                    <td>Twoje zdjęcie:</td>
-                    <td><input type="file" name="photo" id="photo" size="25" /></td>
-                    <td id="testphoto">Nie wymagane</td>
-                </tr>
-                <tr>
                     <td></td>
                     <td><input type="submit" value="Rejestruj" id="send"></td>
                     <td></td>
