@@ -1,40 +1,12 @@
 <?php
-function _connectMySQL($setLocalOrOnlineDB)
-{
-  global $typeOfDB;
-  $local = $setLocalOrOnlineDB;
-  if($_SERVER['SERVER_NAME'] == 'localhost')
-  {
-    if($local)
-    {
-      #Lokalna Baza Danych
-      $servername = 'localhost';
-      $username = 'root';
-      $password = 'root';
-      $db = 'chat';
-      $typeOfDB = "Lokalna Baza Danych";
-    }
-    else
-    {
-      #Remote
-      $servername = '';
-      $username = '';
-      $password = '';
-      $db = '';
-      $typeOfDB = "";
-    }
-  }
-  else
-  {
-    #Remote
-    $servername = '';
-    $username = '';
-    $password = '';
-    $db = '';
-    $typeOfDB = "";
-  }
 
-  $conn = new mysqli($servername, $username, $password,$db);
+function connect_to_mysql() {
+  $host = env('DB_HOST', 'localhost');
+  $user = env('DB_USERNAME', 'root');
+  $pass = env('DB_PASSWORD', '');
+  $name = env('DB_NAME', 'chat');
+  
+  $conn = new mysqli($host, $user, $pass, $name);
 
   if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -42,5 +14,3 @@ function _connectMySQL($setLocalOrOnlineDB)
 
   return $conn;
 }
-
-?>
