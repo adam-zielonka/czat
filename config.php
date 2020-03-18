@@ -17,11 +17,10 @@ $localDataBaseActive = true;
 $conn = _connectMySQL($localDataBaseActive);
 
 $site = _isSite();
-if ($site == true) {
-    include "./modules/section/html.php";
-}
+if ($site == true)
+	include "./modules/section/html.php";
 else
-    _viewFunction();
+	_viewFunction();
 
 //Zamykanie połączenia z MySQL
 $conn->close();

@@ -1,7 +1,7 @@
 <?php
-   session_destroy(); 
-   echo "Zostałeś wylogowany :-)";
+  session_destroy(); 
+  echo "Zostałeś wylogowany :-)";
 ?>
 <script>
-    location.reload();
+  location.reload();
 </script>

@@ -1,3 +1,3 @@
-				<div class="tekst">
-				&copy; 2015 Adam Zielonka
-				</div>
+<div class="tekst">
+	&copy; 2015 Adam Zielonka
+</div>
