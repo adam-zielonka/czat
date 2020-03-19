@@ -9,5 +9,3 @@
     <li><a class="menu" href="/index.php?strona=users.czat">Czat</a></li>
   </ul>
 </div>
-<script src="/js/menu.js">
-</script>

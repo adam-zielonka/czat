@@ -12,7 +12,7 @@
         <?php include "./modules/section/menu.php"; ?>
       </nav>
 			<article>
-         <?php _viewSubSite(); ?>
+         <?php view_sub_site(); ?>
       </article>
 			<footer>
         <?php include "./modules/section/footer.php"; ?>

@@ -4,7 +4,7 @@ function get_site_name($fileName) {
   return substr($fileName, strpos($fileName, ".") + 1);
 }
 
-function _getTypeOfSite($fileName) {    
+function get_site_type($fileName) {    
   return substr($fileName, 0, strpos($fileName, "."));
 }
 
