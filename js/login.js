@@ -3,8 +3,8 @@ function Login(form) {
     type: "POST",
     url: "/index.php?strona=function.login",
     data: form,
-    processData: false,  // tell jQuery not to process the data
-    contentType: false,   // tell jQuery not to set contentType
+    processData: false,
+    contentType: false,
     success: function (msg) {
       $("#komunikat").html(msg);
     },

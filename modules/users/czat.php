@@ -14,4 +14,4 @@
   </div>
   <div id="online" class="tekst">Trwa ładowanie userów...</div>
 </div>
-<script src="/js/czat2.js"></script>
+<script src="/js/chat.js"></script>
