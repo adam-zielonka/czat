@@ -1,43 +1,64 @@
 @import url("/css/czat.css");
 
-body {
-	margin: 0px;
-    font-family: Arial;
+html, body {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: Arial;
 }
 
-#strona {
-	width: 100%;
-	margin: auto;
-    background-color: Orange;
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: orange;
 }
 
 header {
-	background-color: Green;
-	padding: 10px;
-	color: White;
-	text-align: center;
-	font-size: 40px;
-    font-weight: 700;
+  background-color: green;
+  color: white;
+  display: flex;
+  justify-content: space-between;
 }
 
-nav {
-    position: relative;
-	background-color: Orange;
-    float: left;
+.title {
+  padding: 10px;
+  font-size: 40px;
+  font-weight: 700;
 }
 
-article {
-	background-color: Orange;
-    float: left;
+main {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+}
+
+.login { 
+  padding-top: 5px;
+  padding-right: 5px
+}
+
+.login > div {
+  padding: 10px;
 }
 
 footer {
-	background-color: Gray;
-	clear: both;
+  background-color: gray;
+}
+
+nav {
+  
+}
+
+article {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: none;
 }
 
 .tekst {
-	padding: 10px;
+  padding: 10px;
 }
 
 table.form {
@@ -53,7 +74,7 @@ table.form {
 }
 
 a:hover {
-	background-color: White;
+  background-color: White;
 }
 
 a:link, a:visited {
@@ -64,5 +85,5 @@ a:link, a:visited {
 
 a:link:active, a:visited:active {
     color: Red;
-	background-color: White;
-} 
+  background-color: White;
+}

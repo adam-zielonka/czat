@@ -1,28 +1,29 @@
 .czat {
-    padding: 10px;
-    width: 500px;
-    height: 500px;
-    overflow-y: scroll;
-    background-color: #000;
-    color: #fff;
+  margin: 10px;
+  padding: 10px;
+  overflow-y: scroll;
+  flex: 1;
+  background-color: #000;
+  color: #fff;
 } 
 
 .time {
-    color: #808080;
-    font-size: smaller;
+  color: #808080;
+  font-size: smaller;
 }
 
 .user {
-    font-weight: bold;
-    color: #ffd800;
+  font-weight: bold;
+  color: #ffd800;
 }
 
 .sendtxt {
-    padding: 1px;
-    background-color: #000;
-    color: #fff;
+  padding: 1px;
+  margin: 10px;
+  background-color: #000;
+  color: #fff;
 }
 
 .sendplace {
-    width: 450px;
+  width: 450px;
 }
