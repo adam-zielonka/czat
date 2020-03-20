@@ -48,13 +48,15 @@ function render(czat) {
   count = Object.keys(czat.msg).length;
   if (count != 0) {
     for (i = 0; i < count; i++) {
-      out += '<p><span class="time">';
-      out += czat.msg[i].time;
-      out += '</span><br><span style="font-weight: bold;" class="' + czat.msg[i].user + '">';
-      out += czat.msg[i].user;
-      out += ':</span> ';
-      out += czat.msg[i].msg;
-      out += '</p>';
+      if(nr < czat.msg[i].id) {
+        out += '<p><span class="time">';
+        out += czat.msg[i].time;
+        out += '</span><br><span style="font-weight: bold;" class="' + czat.msg[i].user + '">';
+        out += czat.msg[i].user;
+        out += ':</span> ';
+        out += czat.msg[i].msg;
+        out += '</p>';
+      }
     }
     nr = czat.msg[count - 1].id;
     $("#czat").append(out);
@@ -68,7 +70,8 @@ $("#sendmsg").click(function () {
   SendMsg();
 })
 
-function afterSend() {
+function afterSend(json) {
+  if(json) render(json);
   $("#sendmsg").removeAttr('disabled');
   $("#msg").removeAttr('disabled');
   $("#msg").val('');
@@ -76,11 +79,13 @@ function afterSend() {
 
 function SendMsg() {
   var msg = $("#msg").val();
-  $.ajax({
+  if(msg) $.ajax({
     type: "POST",
-    url: "/index.php?strona=function.czat-send",
+    url: "/index.php?strona=function.czat",
+    dataType: 'json',
     data: {
-      msg: msg
+      msg: msg,
+      nr: nr,
     },
     success: afterSend,
     error: afterSend
