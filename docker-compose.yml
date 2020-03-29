@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+
+  app:
+    build:
+      context: ./
+      dockerfile: php.dockerfile
+    ports:
+      - 8001:80
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+
+  mariadb:
+    image: mariadb:10.4
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: php-chat
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8002:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+    depends_on:
+      - mariadb
