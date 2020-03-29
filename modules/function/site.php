@@ -15,7 +15,7 @@ function view_sub_site() {
     include './modules/page/start.php';
   elseif(
     (get_site_type(addslashes($_GET["strona"])) == 'users') && 
-    (file_exists('./modules/users/'.get_site_name(addslashes ($_GET["strona"])).'.php'))
+    (file_exists('./modules/users/'.get_site_name(addslashes($_GET["strona"])).'.php'))
   ) {
     if (isset($_SESSION["login"]))
       include './modules/users/'.get_site_name(addslashes($_GET["strona"])) .'.php';
@@ -31,8 +31,8 @@ function view_sub_site() {
 }
 
 function view_function() {
-  if(file_exists('./modules/functionpage/'.get_site_name(addslashes ($_GET["strona"])) .'.php'))
-    include './modules/functionpage/'.get_site_name(addslashes ($_GET["strona"])) .'.php';
+  if(file_exists('./modules/functionpage/'.get_site_name(addslashes($_GET["strona"])) .'.php'))
+    include './modules/functionpage/'.get_site_name(addslashes($_GET["strona"])) .'.php';
   else
     include './modules/page/404.php';
 }
