@@ -113,9 +113,7 @@ $("#send").click(function () {
 			($("#testemail").html() == "OK") &&
 			($("#testpassword").html() == "OK") &&
 			($("#testpasswordrepeat").html() == "OK") &&
-			($("#testlogin").html() == "OK") &&
-			(($('#photo').get(0).files.length === 0) ||
-			($("#testphoto").html() == "OK"))) {
+			($("#testlogin").html() == "OK")) {
 				var fd = new FormData(document.querySelector("form[id='rejestracja']"));
 				$("#formularz").html("Trwa rejestrowanie...");
 				Rejestruj(fd);
