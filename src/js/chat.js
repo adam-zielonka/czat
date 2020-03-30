@@ -1,93 +1,96 @@
-var nr = 0;
-var stopAjax = 0;
-var delay = 2000;
+let nr = 0
+let stopAjax = 0
+let delay = 2000
+
+window.$$ = document.getElementById.bind(document)
+
+Node.prototype.on = window.on = function (name, fn) {
+  this.addEventListener(name, fn)
+}
+
+Node.prototype.disable = window.disable = function (name, fn) {
+  this.setAttribute('disabled', true)
+}
+
+Node.prototype.enable = window.enable = function (name, fn) {
+  this.removeAttribute('disabled')
+}
+
+function disableForm() {
+  $$('sendmsg').disable()
+  $$('msg').disable()
+}
+
+function enableForm() {
+  $$('sendmsg').enable()
+  $$('msg').enable()
+}
 
 function fetchChat() {
-  $.ajax({
-    type: "POST",
-    url: "/index.php?strona=function.czat",
-    dataType: 'json',
-    data: {
-      nr: nr
-    },
-    success: function (json) {
-      if(nr === 0) $("#czat").html(' ');
-      render(json);
-      $("#sendmsg").removeAttr('disabled');
-      $("#msg").removeAttr('disabled');
-      if (!(stopAjax))
-        setTimeout(function() { fetchChat(); }, delay);
-    },
-    error: function () {
-      $("#online").html("Błąd połączenia :-( Sprawdź czy masz internet.");
-      $("#sendmsg").prop("disabled", true);
-      $("#msg").prop("disabled", true);
-      if (!(stopAjax))
-        setTimeout(function() { fetchChat(); }, delay);
-    },
+  fetch('/index.php?strona=function.czat', { 
+    body: new URLSearchParams([['nr', nr]]),
+    method: 'POST' 
+  })
+  .then((response) => response.json())
+  .then((json) => {
+    if (nr === 0) $$('czat').innerHTML = ''
+
+    render(json)
+    enableForm()
+
+    if (!stopAjax) setTimeout(fetchChat, delay)
+  })
+  .catch((error) => {
+    console.log(error)
+
+    $$('online').innerHTML = 'Błąd połączenia :-( Sprawdź czy masz internet.'
+    disableForm()
+
+    if (!stopAjax) setTimeout(fetchChat, delay)
   })
 }
 
-$(document).ready(function () {
-  fetchChat();
-});
+(function () {
+  fetchChat()
+})()
+
 
 function render(czat) {
-  var i = 1;
+  $$('online').innerHTML = 'Online: ' + czat.users.map(u => u.user).join(', ')
 
-  var out = 'Online: ';
-  var count = Object.keys(czat.users).length;
-  for (i = 0; i < count; i++) {
-    out += '';
-    out += czat.users[i].user;
-    out += ', ';
-  }
-  $("#online").html(out);
-
-  out = '';
-  count = Object.keys(czat.msg).length;
-  if (count != 0) {
-    for (i = 0; i < count; i++) {
-      if(nr < czat.msg[i].id) {
-        out += '<p><span class="time">';
-        out += czat.msg[i].time;
-        out += '</span><br><span style="font-weight: bold;" class="' + czat.msg[i].user + '">';
-        out += czat.msg[i].user;
-        out += ':</span> ';
-        out += czat.msg[i].msg;
-        out += '</p>';
-      }
-    }
-    nr = czat.msg[count - 1].id;
-    $("#czat").append(out);
-    $('#czat').scrollTop($('#czat')[0].scrollHeight);
-  }
+  czat.msg.filter((msg) => nr < msg.id)
+  .map(({time, user, msg, id}) => {
+    nr = id
+    const p = document.createElement('p')
+    p.innerHTML = `
+      <span class="time">${time}</span><br/>
+      <span style="font-weight: bold;" class="${user}">${user}:</span>
+      ${msg}
+    `
+    return p
+  }).forEach(out => {
+    $$('czat').append(out)
+    $$('czat').scrollTop = $$('czat').scrollHeight
+  })
 }
 
-$("#sendmsg").click(function () {
-  $("#sendmsg").prop("disabled", true);
-  $("#msg").prop("disabled", true);
-  SendMsg();
+$$('sendmsg').on('click', () => {
+  disableForm()
+  sendMsg()
 })
 
 function afterSend(json) {
-  if(json) render(json);
-  $("#sendmsg").removeAttr('disabled');
-  $("#msg").removeAttr('disabled');
-  $("#msg").val('');
+  if(json) render(json)
+  enableForm()
+  $$('msg').value = ''
 }
 
-function SendMsg() {
-  var msg = $("#msg").val();
-  if(msg) $.ajax({
-    type: "POST",
-    url: "/index.php?strona=function.czat",
-    dataType: 'json',
-    data: {
-      msg: msg,
-      nr: nr,
-    },
-    success: afterSend,
-    error: afterSend
+function sendMsg() {
+  fetch("/index.php?strona=function.czat", { 
+    body: new URLSearchParams([['nr', nr], ['msg', $$('msg').value]]),
+    method: 'POST' 
   })
+  .then((response) => response.json())
+  .then(afterSend)
+  .catch(() => afterSend())
 }
