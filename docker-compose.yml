@@ -3,7 +3,7 @@ services:
 
   app:
     build:
-      context: ./src
+      context: ./
       dockerfile: php.dockerfile
     ports:
       - 8001:80
@@ -18,11 +18,13 @@ services:
       MYSQL_ROOT_PASSWORD: php-chat
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    build:
+      context: ./
+      dockerfile: pma.dockerfile
     ports:
       - 8002:80
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=mariadb
-    depends_on:
+    depends_on: 
       - mariadb
