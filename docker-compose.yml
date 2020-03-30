@@ -3,13 +3,13 @@ services:
 
   app:
     build:
-      context: ./
+      context: ./src
       dockerfile: php.dockerfile
     ports:
       - 8001:80
     working_dir: /var/www
     volumes:
-      - ./:/var/www
+      - ./src/:/var/www
 
   mariadb:
     image: mariadb:10.4
