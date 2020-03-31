@@ -1,205 +1,115 @@
-function SprawdzEmail() {
-	var email = $("#email").val();
+function isEmailOK() {
+  const email = $$("email").value
+  const regex = /^[0-9a-z_.-]+@[0-9a-z.-]+\.[a-z]{2,}$/i
 
-	var WzorMaila = /^[0-9a-z_.-]+@[0-9a-z.-]+\.[a-z]{2,3}$/i
-	if (!WzorMaila.test(email)) {
-		$("#testemail").html("Wymagane.");
-	}
-	else {
-		$("#testemail").html("Sprawdzanie...");
-		CheckEmail(email);
-	}
+  if (!regex.test(email)) {
+    $$('testemail').innerHTML = "Wymagane."
+  }
+  else {
+    $$('testemail').innerHTML = "Sprawdzanie..."
+    fetchCheck('checkemail', email, msg => {
+      if (msg == 0) {
+        $$('testemail').innerHTML = "OK"
+      }
+      else
+        $$('testemail').innerHTML = "E-mail już istnieje :-("
+    })
+  }
 }
 
-function SprawdzLogin() {
-	var login = $("#login").val();
+function isUserNameOK() {
+  const login = $$("login").value
+  const regex = /^[A-Ża-ż0-9_.-]{3,}$/i
 
-	var WzorLogin = /^[A-Ża-ż0-9_.-]{5,}$/i
-	if (!WzorLogin.test(login)) {
-		$("#testlogin").html("Wymagane, min 5 znaków (A-Ża-ż0-9_.-)");
-	}
-	else {
-		$("#testlogin").html("Sprawdzanie...");
-		CheckLogin(login);
-	}
+  if (!regex.test(login)) {
+    $$("testlogin").innerHTML = "Wymagane, min 3 znaków (A-Ża-ż0-9_.-)"
+  }
+  else {
+    $$("testlogin").innerHTML = "Sprawdzanie..."
+    fetchCheck('checklogin', login, msg => {
+      if (msg == 0)
+        $$("testlogin").innerHTML = "OK"
+      else
+        $$("testlogin").innerHTML = "Login już istnieje :-("
+    })
+  }
 }
 
-function SprawdzHaslo() {
-	var error = false;
-	var haslo = $("#password").val();
+function isPasswordOK() {
+  const password = $$("password").value
+  const regex = /.{3,}/
 
-	var WzorHaslo = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/
-	if (!WzorHaslo.test(haslo)) {
-		$("#testpassword").html("Wymagane, min 6 znaków (przynajmniej jedna mała litera, duża litera i cyfra).");
-	}
-	else {
-		$("#testpassword").html("OK");
-		error = true;
-	}
+  if (!regex.test(password)) {
+    $$("testpassword").innerHTML = "Wymagane, min 3 znaków"
+  }
+  else {
+    $$("testpassword").innerHTML = "OK"
+  }
 }
 
-function SprawdzHasla() {
-	var error = false;
-	var haslo = $("#password").val();
-	var haslo2 = $("#passwordrepeat").val();
+function isPasswordsMatch() {
+  const pass1 = $$("password").value
+  const pass2 = $$("passwordrepeat").value
 
-	if (haslo != haslo2) {
-		$("#testpasswordrepeat").html("Wymagane, takie same jak wyżej :-)");
-	}
-	else {
-		$("#testpasswordrepeat").html("OK");
-		error = true;
-	}
-	return error;
+  if (pass1 != pass2)
+    $$("testpasswordrepeat").innerHTML = "Wymagane, takie same jak wyżej :-)"
+  else
+    $$("testpasswordrepeat").innerHTML = "OK"
 }
 
-$("#login").keyup(function () {
-	SprawdzLogin();
-}).change(function () {
-	SprawdzLogin();
-}).bind(function () {
-	SprawdzLogin();
-}).click(function () {
-	SprawdzLogin();
-});
+$$('login').on('input', () => isUserNameOK())
+$$('email').on('input', () => isEmailOK())
+$$('password').on('input', () => { isPasswordOK(); isPasswordsMatch() })
+$$('passwordrepeat').on('input', () => isPasswordsMatch())
 
-$("#email").keyup(function () {
-	SprawdzEmail();
-}).change(function () {
-	SprawdzEmail();
-}).bind(function () {
-	SprawdzEmail();
-}).click(function () {
-	SprawdzEmail();
-});
+ajaxElement = 0
+ajaxSpr = 0
 
-$("#password").keyup(function () {
-	SprawdzHaslo();
-	SprawdzHasla();
-}).change(function () {
-	SprawdzHaslo();
-	SprawdzHasla();
-}).bind(function () {
-	SprawdzHaslo();
-	SprawdzHasla();
-}).click(function () {
-	SprawdzHaslo();
-	SprawdzHasla();
-});
+function lastCheck() {
+  if(ajaxElement) setTimeout(lastCheck)
+  else {
+    if (ajaxElement == 0 && ajaxSpr == 1) {
+      ajaxSpr = 0;
+      if (
+      ($$('testemail').innerHTML === 'OK') &&
+      ($$('testpassword').innerHTML === 'OK') &&
+      ($$('testpasswordrepeat').innerHTML === 'OK') &&
+      ($$('testlogin').innerHTML === 'OK')) {
+        var fd = new FormData(document.querySelector("form[id='rejestracja']"));
+        $$('formularz').innerHTML = "Trwa rejestrowanie..."
+        createUser(fd);
+      }
+    }
+  }
+}
 
-$("#passwordrepeat").keyup(function () {
-	SprawdzHasla();
-}).change(function () {
-	SprawdzHasla();
-}).bind(function () {
-	SprawdzHasla();
-}).click(function () {
-	SprawdzHasla();
-});
-
-ajaxElement = 0;
-ajaxSpr = 0;
-$("#send").click(function () {
-
-	SprawdzEmail();
-	SprawdzHasla();
-	SprawdzHaslo();
-	SprawdzLogin();
-	ajaxSpr = 1;
-	$(document).ajaxStop(function () {
-		if (ajaxElement == 0 && ajaxSpr == 1) {
-			ajaxSpr = 0;
-			if (
-			($("#testemail").html() == "OK") &&
-			($("#testpassword").html() == "OK") &&
-			($("#testpasswordrepeat").html() == "OK") &&
-			($("#testlogin").html() == "OK")) {
-				var fd = new FormData(document.querySelector("form[id='rejestracja']"));
-				$("#formularz").html("Trwa rejestrowanie...");
-				Rejestruj(fd);
-			}
-		}
-	});
+$$('send').on('click', () => {
+  isEmailOK()
+  isPasswordsMatch()
+  isPasswordOK()
+  isUserNameOK()
+  ajaxSpr = 1
+  setTimeout(lastCheck)
 })
 
-function CheckEmail(email) {
-	ajaxElement++;
-	$.ajax({
-		type: "POST",
-		url: "/index.php?strona=function.createuser",
-		data: {
-			checkemail: email
-		},
-		success: function (msg) {
-			ajaxElement--;
-			if (msg == 0) {
-				$("#testemail").html("OK");
-			}
-			else
-				$("#testemail").html("E-mail już istnieje :-(");
-		},
-		error: function () {
-			ReadError();
-		}
-	})
+function fetchCheck(key, value, callback) {
+  ajaxElement++
+  fetch("/index.php?strona=function.user", { 
+    body: new URLSearchParams([[key, value]]),
+    method: 'POST' 
+  })
+  .then(response => response.text())
+  .then(v => { 
+    ajaxElement--
+    callback(v)
+  })
 }
 
-function CheckLogin(login) {
-	ajaxElement++;
-	$.ajax({
-		type: "POST",
-		url: "/index.php?strona=function.createuser",
-		data: {
-			checklogin: login
-		},
-		success: function (msg) {
-			ajaxElement--;
-			if (msg == 0) {
-				$("#testlogin").html("OK");
-			}
-			else
-				$("#testlogin").html("Login już istnieje :-(");
-		},
-		error: function () {
-			ReadError();
-		}
-	})
-}
-
-function CheckPhoto(photo) {
-	ajaxElement++;
-	$.ajax({
-		type: "POST",
-		url: "/index.php?strona=function.createuser&checkphoto=1",
-		data: photo,
-		processData: false,  // tell jQuery not to process the data
-		contentType: false,   // tell jQuery not to set contentType
-		success: function (msg) {
-			ajaxElement--;
-			if (msg == '') {
-				$("#testphoto").html("OK");
-			}
-			else
-				$("#testphoto").html(msg);
-		},
-		error: function () {
-			ReadError();
-		}
-	})
-}
-
-function Rejestruj(form) {
-	$.ajax({
-		type: "POST",
-		url: "/index.php?strona=function.createuser&rejestruj=1",
-		data: form,
-		processData: false,  // tell jQuery not to process the data
-		contentType: false,   // tell jQuery not to set contentType
-		success: function (msg) {
-			$("#formularz").html(msg);
-		},
-		error: function () {
-			ReadError();
-		}
-	})
+function createUser(form) {
+  fetch("/index.php?strona=function.user&rejestruj=1", { 
+    body: new URLSearchParams(form),
+    method: 'POST' 
+  })
+  .then(response => response.text())
+  .then(msg => $$('formularz').innerHTML = msg)
 }

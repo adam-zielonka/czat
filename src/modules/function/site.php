@@ -2,10 +2,7 @@
     
 function is_site() {
   if(isset($_GET["strona"])) {
-    if(get_site_type(addslashes($_GET["strona"])) == 'function')
-      return false;
-    else
-      return true;
+    return (get_site_type(addslashes($_GET["strona"])) == 'function') ? false : true;
   } 
   else return true;
 }
@@ -31,8 +28,8 @@ function view_sub_site() {
 }
 
 function view_function() {
-  if(file_exists('./modules/functionpage/'.get_site_name(addslashes($_GET["strona"])) .'.php'))
-    include './modules/functionpage/'.get_site_name(addslashes($_GET["strona"])) .'.php';
+  if(file_exists('./modules/api/'.get_site_name(addslashes($_GET["strona"])) .'.php'))
+    include './modules/api/'.get_site_name(addslashes($_GET["strona"])) .'.php';
   else
     include './modules/page/404.php';
 }

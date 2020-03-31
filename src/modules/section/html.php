@@ -7,7 +7,6 @@
     <meta name="author" content="Adam Zielonka">
     <title>Czat</title>
     <link rel="stylesheet" type="text/css" href="/css/styl.css">
-    <script src="/js/jquery-2.1.4.min.js"></script>
     <script src="/js/bling.js"></script>
     <style>
     </style>

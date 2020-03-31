@@ -61,8 +61,10 @@ function render(czat) {
 }
 
 $$('sendmsg').on('click', () => {
-  disableForm()
-  sendMsg()
+  if($$('msg').value) {
+    disableForm()
+    sendMsg()
+  }
 })
 
 function afterSend(json) {

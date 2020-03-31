@@ -5,8 +5,8 @@
       <table>
         <tr>
           <td>Login:</td>
-          <td><input type="text" name="login" id="login" pattern="^[A-Ża-ż0-9_.-]{5,}$" required></td>
-          <td id="testlogin">Wymagane, min 5 znaków (A-Ża-ż0-9_.-).</td>
+          <td><input type="text" name="login" id="login" required></td>
+          <td id="testlogin">Wymagane, min 3 znaków (A-Ża-ż0-9_.-).</td>
         </tr>
         <tr>
           <td>E-mail:</td>
@@ -15,12 +15,12 @@
         </tr>
         <tr>
           <td>Hasło:</td>
-          <td><input type="password" name="password" id="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" required></td>
-          <td id="testpassword">Wymagane, min 6 znaków (przynajmniej jedna mała litera, duża litera i cyfra).</td>
+          <td><input type="password" name="password" id="password" required></td>
+          <td id="testpassword">Wymagane, min 3 znaków</td>
         </tr>
         <tr>
           <td>Powtórz hasło:</td>
-          <td><input type="password" name="passwordrepeat" id="passwordrepeat" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" required></td>
+          <td><input type="password" name="passwordrepeat" id="passwordrepeat" required></td>
           <td id="testpasswordrepeat">Wymagane, takie same jak wyżej :-)</td>
         </tr>
         <tr>
