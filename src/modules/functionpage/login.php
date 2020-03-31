@@ -1,5 +1,7 @@
 <?php
 
+http_response_code(401);
+
 if(isset($_POST["login"]) && isset($_POST["password"])) {
   $login = addslashes($_POST['login']);
   $password = md5(addslashes($_POST['password']));
@@ -20,8 +22,8 @@ if(isset($_POST["login"]) && isset($_POST["password"])) {
     if($aktywacja != 0) {
       if($passwordDB == $password) {
         $_SESSION["login"] = $login;
+        http_response_code(200);
         echo "Zostałeś zalogowany :-)";
-        echo "<script>location.reload();</script>";
       }
       else {
         echo "Złe hasło :-(";
