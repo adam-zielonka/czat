@@ -1,30 +1,33 @@
-version: '3.7'
 services:
-
   app:
     build:
       context: ./
       dockerfile: php.dockerfile
     ports:
-      - 8001:80
-    working_dir: /var/www
+      - "127.0.0.1:8001:80"
     volumes:
       - ./src/:/var/www
-
+    environment:
+      DB_HOST: mariadb
+      DB_NAME: chat
+      DB_USERNAME: chat
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+    depends_on:
+      mariadb:
+        condition: service_healthy
   mariadb:
-    image: mariadb:10.4
-    restart: always
+    image: mariadb:11.8
     environment:
-      MYSQL_ROOT_PASSWORD: php-chat
-
-  phpmyadmin:
-    build:
-      context: ./
-      dockerfile: pma.dockerfile
-    ports:
-      - 8002:80
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=mariadb
-    depends_on: 
-      - mariadb
+      MARIADB_RANDOM_ROOT_PASSWORD: "yes"
+      MARIADB_DATABASE: chat
+      MARIADB_USER: chat
+      MARIADB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+    volumes:
+      - chat-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+volumes:
+  chat-data:

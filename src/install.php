@@ -1,15 +1,17 @@
 <?php
+if (PHP_SAPI !== 'cli') { http_response_code(403); exit; }
 
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 
 require './modules/function/utils.php';
 
 function connect_to_mysql() {
   $host = env('DB_HOST', 'mariadb');
-  $user = env('DB_USERNAME', 'root');
-  $pass = env('DB_PASSWORD', 'php-chat');
-  
+  $user = env('DB_USERNAME', 'chat');
+  $pass = env('DB_PASSWORD');
+  if (!$pass) throw new RuntimeException('DB_PASSWORD is required');
+
   $conn = new mysqli($host, $user, $pass);
 
   if ($conn->connect_error) {
@@ -22,32 +24,33 @@ function connect_to_mysql() {
 load_envs();
 $conn = connect_to_mysql();
 $db = env('DB_NAME', 'chat');
+if (!preg_match('/^[A-Za-z0-9_]+$/D', $db)) throw new RuntimeException('Invalid DB_NAME');
 
 $create_db = "
-  CREATE DATABASE $db;
+  CREATE DATABASE IF NOT EXISTS `$db`;
 ";
 
 $create_czat = "
-  CREATE TABLE czat (
+  CREATE TABLE IF NOT EXISTS czat (
     id int(11) NOT NULL AUTO_INCREMENT,
     time timestamp NOT NULL DEFAULT current_timestamp(),
     user varchar(256) NOT NULL,
     msg varchar(1024) NOT NULL,
     CONSTRAINT pk PRIMARY KEY (id)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ";
 
 $create_online = "
-  CREATE TABLE online (
+  CREATE TABLE IF NOT EXISTS online (
     id int(11) NOT NULL AUTO_INCREMENT,
     user varchar(255) NOT NULL,
     time timestamp NOT NULL DEFAULT current_timestamp(),
     CONSTRAINT pk PRIMARY KEY (id)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ";
 
 $create_users = "
-  CREATE TABLE users (
+  CREATE TABLE IF NOT EXISTS users (
     id int(11) NOT NULL AUTO_INCREMENT,
     login varchar(256) NOT NULL,
     password varchar(256) NOT NULL,
@@ -57,7 +60,7 @@ $create_users = "
     level int(11) NOT NULL DEFAULT 1,
     aktywacja int(11) NOT NULL DEFAULT 0,
     CONSTRAINT pk PRIMARY KEY (id)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ";
 
 query($create_db, "Create db '$db': ");

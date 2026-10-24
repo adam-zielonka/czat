@@ -13,9 +13,9 @@ function enableForm() {
 }
 
 function fetchChat() {
-  fetch('/index.php?strona=function.czat', { 
+  chatFetch('/index.php?strona=function.czat', {
     body: new URLSearchParams([['nr', nr]]),
-    method: 'POST' 
+    method: 'POST'
   })
   .then((response) => response.json())
   .then((json) => {
@@ -42,17 +42,20 @@ function fetchChat() {
 
 
 function render(czat) {
-  $$('online').innerHTML = 'Online: ' + czat.users.map(u => u.user).join(', ')
+  $$('online').textContent = 'Online: ' + czat.users.map(u => u.user).join(', ')
 
   czat.msg.filter((msg) => nr < msg.id)
   .map(({time, user, msg, id}) => {
     nr = id
     const p = document.createElement('p')
-    p.innerHTML = `
-      <span class="time">${time}</span><br/>
-      <span style="font-weight: bold;" class="${user}">${user}:</span>
-      ${msg}
-    `
+    const stamp = document.createElement('span')
+    stamp.className = 'time'
+    stamp.textContent = time
+    const author = document.createElement('strong')
+    author.textContent = user + ': '
+    const decoded = document.createElement('textarea')
+    decoded.innerHTML = msg
+    p.append(stamp, document.createElement('br'), author, document.createTextNode(decoded.value))
     return p
   }).forEach(out => {
     $$('czat').append(out)
@@ -74,9 +77,9 @@ function afterSend(json) {
 }
 
 function sendMsg() {
-  fetch("/index.php?strona=function.czat", { 
+  chatFetch("/index.php?strona=function.czat", {
     body: new URLSearchParams([['nr', nr], ['msg', $$('msg').value]]),
-    method: 'POST' 
+    method: 'POST'
   })
   .then((response) => response.json())
   .then(afterSend)

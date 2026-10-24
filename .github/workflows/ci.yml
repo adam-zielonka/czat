@@ -1,0 +1,40 @@
+name: PHP security checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    services:
+      mariadb:
+        image: mariadb:11.8
+        env:
+          MARIADB_RANDOM_ROOT_PASSWORD: 'yes'
+          MARIADB_DATABASE: chat_test
+          MARIADB_USER: chat
+          MARIADB_PASSWORD: ci-disposable-password
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      DB_HOST: 127.0.0.1
+      DB_USERNAME: chat
+      DB_PASSWORD: ci-disposable-password
+      DB_NAME: chat_test
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mysqli
+          coverage: none
+      - run: find src tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      - run: php tests/security.php
+      - run: cd src && php install.php
+      - run: php tests/database.php
