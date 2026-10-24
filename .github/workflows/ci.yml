@@ -36,5 +36,6 @@ jobs:
           coverage: none
       - run: find src tests -name '*.php' -print0 | xargs -0 -n1 php -l
       - run: php tests/security.php
+      - run: python3 tests/http_regression.py
       - run: cd src && php install.php
       - run: php tests/database.php

@@ -1,3 +1,5 @@
 env.php
 
 .env
+
+__pycache__/
