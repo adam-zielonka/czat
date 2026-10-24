@@ -12,8 +12,9 @@ if (!$user || !$user['aktywacja'] || !verify_stored_password($password, $user['p
     echo 'Nieprawidłowy login lub hasło.';
     return;
 }
-if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
-    db_query('UPDATE users SET password = ? WHERE id = ?', [password_hash($password, PASSWORD_DEFAULT), $user['id']]);
+$algorithm = strlen($password) > 72 ? PASSWORD_ARGON2ID : PASSWORD_DEFAULT;
+if (password_needs_rehash($user['password'], $algorithm)) {
+    db_query('UPDATE users SET password = ? WHERE id = ?', [password_hash($password, $algorithm), $user['id']]);
 }
 session_regenerate_id(true);
 $_SESSION['login'] = $user['login'];
