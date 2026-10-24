@@ -1,36 +1,22 @@
 <?php
 
+$login = input_string($_POST, 'login');
+$password = input_string($_POST, 'password');
 http_response_code(401);
-
-if(isset($_POST["login"]) && isset($_POST["password"])) {
-  $login = addslashes($_POST['login']);
-  $password = md5(addslashes($_POST['password']));
-
-  global $conn;
-  $sql = "SELECT password FROM users Where login = '$login';";
-  $result = mysqli_query($conn,$sql);
-  $row = $result->fetch_array(MYSQLI_NUM);
-  $passwordDB = $row[0];
-  if(mysqli_num_rows($result) == 0) {
-    echo 'Użytkownik nie istnieje :-(';
-  }
-  else {
-    $sql = "SELECT aktywacja FROM users Where login = '$login';";
-    $result = mysqli_query($conn,$sql);
-    $row = $result->fetch_array(MYSQLI_NUM);
-    $aktywacja = $row[0];
-    if($aktywacja != 0) {
-      if($passwordDB == $password) {
-        $_SESSION["login"] = $login;
-        http_response_code(200);
-        echo "Zostałeś zalogowany :-)";
-      }
-      else {
-        echo "Złe hasło :-(";
-      }
-    } 
-    else {
-      echo 'Konto nieaktywne :-(';
-    }
-  }  
+if ($login === '' || $password === '' || strlen($password) > 1024) {
+    echo 'Nieprawidłowy login lub hasło.';
+    return;
 }
+$user = db_query('SELECT id, login, password, aktywacja FROM users WHERE login = ? LIMIT 1', [$login])->fetch_assoc();
+if (!$user || !$user['aktywacja'] || !verify_stored_password($password, $user['password'])) {
+    echo 'Nieprawidłowy login lub hasło.';
+    return;
+}
+$algorithm = strlen($password) > 72 ? PASSWORD_ARGON2ID : PASSWORD_DEFAULT;
+if (password_needs_rehash($user['password'], $algorithm)) {
+    db_query('UPDATE users SET password = ? WHERE id = ?', [password_hash($password, $algorithm), $user['id']]);
+}
+session_regenerate_id(true);
+$_SESSION['login'] = $user['login'];
+http_response_code(200);
+echo 'Zostałeś zalogowany :-)';

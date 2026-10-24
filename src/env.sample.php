@@ -2,7 +2,7 @@
 
 $variables = [
   'DB_HOST' => 'localhost',
-  'DB_USERNAME' => 'root',
+  'DB_USERNAME' => 'chat',
   'DB_PASSWORD' => '',
   'DB_NAME' => 'chat',
 ];

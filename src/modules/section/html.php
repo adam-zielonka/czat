@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="<?= escape_html($_SESSION['csrf']) ?>">
     <meta name="description" content="Tworzenie i uczenie się programowania stron internetowych">
     <meta name="keywords" content="HTML,CSS,XML,JavaScript,PHP,MySQL">
     <meta name="author" content="Adam Zielonka">

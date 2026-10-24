@@ -1,16 +1,17 @@
 <?php
 
-function connect_to_mysql() {
-  $host = env('DB_HOST', 'mariadb');
-  $user = env('DB_USERNAME', 'root');
-  $pass = env('DB_PASSWORD', 'php-chat');
-  $name = env('DB_NAME', 'chat');
-  
-  $conn = new mysqli($host, $user, $pass, $name);
+function connect_to_mysql(): mysqli {
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    $password = env('DB_PASSWORD');
+    if (!is_string($password) || $password === '') {
+        throw new RuntimeException('DB_PASSWORD is required.');
+    }
+    $connection = new mysqli(env('DB_HOST', 'mariadb'), env('DB_USERNAME', 'chat'), $password, env('DB_NAME', 'chat'));
+    $connection->set_charset('utf8mb4');
+    return $connection;
+}
 
-  if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-  }
-
-  return $conn;
+function db_query(string $sql, array $params = []): mysqli_result|bool {
+    global $conn;
+    return $conn->execute_query($sql, $params);
 }

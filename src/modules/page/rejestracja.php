@@ -16,7 +16,7 @@
         <tr>
           <td>Hasło:</td>
           <td><input type="password" name="password" id="password" required></td>
-          <td id="testpassword">Wymagane, min 3 znaków</td>
+          <td id="testpassword">Wymagane, min 12 znaków</td>
         </tr>
         <tr>
           <td>Powtórz hasło:</td>

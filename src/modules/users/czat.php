@@ -1,8 +1,3 @@
-<style>
-  <?php echo '.'.$_SESSION["login"]; ?> {
-    color: #ffd800;
-  }
-</style>
 <div id="czat" class="czat">Trwa ładowanie danych...</div>
 <div class="sendtxt">
   <form action="" name="czat" onsubmit="return false">

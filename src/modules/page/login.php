@@ -10,7 +10,7 @@
 <?php } else { ?>
 
   <form action="" name="formularz" method="post" id="logowanie" onsubmit="return false">
-    <?php if(isset($_SESSION["login"])) echo $_SESSION["login"]; ?>
+    <?php if(isset($_SESSION["login"])) echo escape_html($_SESSION["login"]); ?>
     <input type="submit" value="Wyloguj" id="wyloguj">
   </form>
   <div id="komunikat" style="clear: both;"></div>

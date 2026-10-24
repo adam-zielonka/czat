@@ -1,45 +1,32 @@
 <?php
 
-function is_email_exist($email) {
-  global $conn;
-  $sql = "SELECT * FROM users WHERE email = '$email';";
-  $result = mysqli_query($conn,$sql);
-  if(!$result)
-    echo "Error: ".$sql."<br>".mysqli_error($conn);
-  $num_rows = mysqli_num_rows($result);
-  return $num_rows;
+if (isset($_POST['checkemail'])) {
+    echo db_query('SELECT id FROM users WHERE email = ? LIMIT 1', [input_string($_POST, 'checkemail')])->num_rows;
+    return;
 }
-
-function is_login_exist($login) {
-  global $conn;
-  $sql = "SELECT * FROM users WHERE login = '$login';";
-  $result = mysqli_query($conn,$sql);
-  if(!$result)
-    echo "Error: ".$sql."<br>".mysqli_error($conn);
-  $num_rows = mysqli_num_rows($result);
-  return $num_rows;
+if (isset($_POST['checklogin'])) {
+    echo db_query('SELECT id FROM users WHERE login = ? LIMIT 1', [input_string($_POST, 'checklogin')])->num_rows;
+    return;
 }
-
-if(isset($_POST["checkemail"])) {
-  $email = addslashes($_POST["checkemail"]);
-  echo is_email_exist($email);
+if (!isset($_GET['rejestruj'])) {
+    http_response_code(400);
+    return;
 }
-
-if(isset($_POST["checklogin"])) {
-  $login = addslashes($_POST["checklogin"]);
-  echo is_login_exist($login);
+$email = input_string($_POST, 'email');
+$login = input_string($_POST, 'login');
+$password = input_string($_POST, 'password');
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254 ||
+    !preg_match('/^[\p{L}0-9_.-]{3,64}$/uD', $login) ||
+    strlen($password) < 12 || strlen($password) > 72) {
+    http_response_code(400);
+    echo 'Podaj prawidłowy login i e-mail oraz hasło od 12 do 72 bajtów.';
+    return;
 }
-
-if(isset($_GET["rejestruj"])) {
-  $email = addslashes($_POST["email"]);
-  $login = addslashes($_POST["login"]);
-  $password = md5(addslashes($_POST["password"]));
-  $photo = './img/logo.png';
-  $kodaktywacji = md5($email + $login);
-  global $conn;
-  $sql = "INSERT INTO users (login, password, email, picture, aktywacja) VALUES ('$login', '$password', '$email', '$photo', '1');";
-  if(!(mysqli_query($conn,$sql))) {
-    echo "Error: ".$sql."<br>".mysqli_error($conn);
-  }
-  else echo "Zarejestrowano";
+if (db_query('SELECT id FROM users WHERE login = ? OR email = ? LIMIT 1', [$login, $email])->num_rows) {
+    http_response_code(409);
+    echo 'Login lub adres e-mail jest zajęty.';
+    return;
 }
+db_query('INSERT INTO users (login, password, email, picture, aktywacja) VALUES (?, ?, ?, ?, 1)',
+    [$login, password_hash($password, PASSWORD_DEFAULT), $email, './img/logo.png']);
+echo 'Zarejestrowano';

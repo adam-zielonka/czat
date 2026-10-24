@@ -1,7 +1,7 @@
 function login(form) {
-  fetch("/index.php?strona=function.login", { 
+  chatFetch("/index.php?strona=function.login", {
     body: new URLSearchParams(form),
-    method: 'POST' 
+    method: 'POST'
   })
   .then(response => {
     if(response.status === 200) location.reload()
@@ -11,8 +11,8 @@ function login(form) {
 }
 
 function logout() {
-  fetch("/index.php?strona=function.logout", {
-    method: 'POST' 
+  chatFetch("/index.php?strona=function.logout", {
+    method: 'POST'
   })
   .then(response => {
     if(response.status === 200) location.reload()

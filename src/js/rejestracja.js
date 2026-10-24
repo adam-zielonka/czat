@@ -37,10 +37,10 @@ function isUserNameOK() {
 
 function isPasswordOK() {
   const password = $$("password").value
-  const regex = /.{3,}/
+  const regex = /^.{12,72}$/s
 
   if (!regex.test(password)) {
-    $$("testpassword").innerHTML = "Wymagane, min 3 znaków"
+    $$("testpassword").innerHTML = "Wymagane, min 12 znaków"
   }
   else {
     $$("testpassword").innerHTML = "OK"
@@ -94,21 +94,21 @@ $$('send').on('click', () => {
 
 function fetchCheck(key, value, callback) {
   ajaxElement++
-  fetch("/index.php?strona=function.user", { 
+  chatFetch("/index.php?strona=function.user", {
     body: new URLSearchParams([[key, value]]),
-    method: 'POST' 
+    method: 'POST'
   })
   .then(response => response.text())
-  .then(v => { 
+  .then(v => {
     ajaxElement--
     callback(v)
   })
 }
 
 function createUser(form) {
-  fetch("/index.php?strona=function.user&rejestruj=1", { 
+  chatFetch("/index.php?strona=function.user&rejestruj=1", {
     body: new URLSearchParams(form),
-    method: 'POST' 
+    method: 'POST'
   })
   .then(response => response.text())
   .then(msg => $$('formularz').innerHTML = msg)
